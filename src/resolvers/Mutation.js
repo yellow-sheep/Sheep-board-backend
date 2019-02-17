@@ -90,6 +90,30 @@ const Mutation = {
       },
       info
     );
+  },
+
+  async updateBoard(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const boardExists = await prisma.exists.Board({
+      id: args.id,
+      author: {
+        id: userId
+      }
+    });
+
+    if (!boardExists) {
+      throw new Error('Unable to update the board');
+    }
+
+    return prisma.mutation.updateBoard(
+      {
+        where: {
+          id: args.id
+        },
+        data: args.data
+      },
+      info
+    );
   }
 };
 
