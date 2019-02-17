@@ -43,6 +43,7 @@ type Mutation {
   deleteUser: User!
   updateUser(data: UpdateUserInput!): User!
   login(data: LoginUserInput!): AuthPayload
+  createBoard(data: CreateBoardInput!): Board!
 }
 
 # type Subscription {
@@ -68,6 +69,10 @@ input UpdateUserInput {
 input LoginUserInput {
   email: String!
   password: String!
+}
+
+input CreateBoardInput {
+  title: String!
 }
 
 type User {
