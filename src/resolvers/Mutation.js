@@ -1,7 +1,7 @@
-import bcrypt from "bcryptjs";
-import getUserId from "../utils/getUserId";
-import generatedToken from "../utils/generatedToken";
-import hashPassword from "../utils/hashPassword";
+import bcrypt from 'bcryptjs';
+import getUserId from '../utils/getUserId';
+import generatedToken from '../utils/generatedToken';
+import hashPassword from '../utils/hashPassword';
 
 const Mutation = {
   async createUser(parent, args, { prisma }, info) {
@@ -9,7 +9,7 @@ const Mutation = {
     const emailTaken = await prisma.exists.User({ email: args.data.email });
 
     if (emailTaken) {
-      throw new Error("Email taken");
+      throw new Error('Email taken');
     }
 
     const user = await prisma.mutation.createUser({
@@ -39,7 +39,7 @@ const Mutation = {
   async updateUser(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    if (typeof args.data.password === "string") {
+    if (typeof args.data.password === 'string') {
       args.data.password = await hashPassword(args.data.password);
     }
     return prisma.mutation.updateUser(
@@ -60,12 +60,12 @@ const Mutation = {
       }
     });
     if (!user.id) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     const isMatch = await bcrypt.compare(args.data.password, user.password);
     if (!isMatch) {
-      throw new Error("Wrong username or password");
+      throw new Error('Wrong username or password');
     }
 
     return {
