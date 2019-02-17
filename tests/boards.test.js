@@ -3,7 +3,8 @@ import { gql } from 'apollo-boost';
 import seedDataBase, {
   boardOne,
   boardTwo,
-  userOne
+  userOne,
+  userTwo
 } from './utils/seedDatabase';
 import { myBoards, createBoard } from './utils/operations';
 import getClient from './utils/getClient';
@@ -13,8 +14,21 @@ const client = getClient();
 beforeEach(seedDataBase);
 
 test('Should get the boards of a user', async () => {
-  const client = getClient(userOne.jwt);
+  const client = getClient(userTwo.jwt);
   const { data } = await client.query({ query: myBoards });
   expect(data.boards.length).toBe(2);
   expect(data.boards[0].author.id).toBe(userOne.user.id);
+});
+
+test('Should create a board when a user is logged in', async () => {
+  const client = getClient(userOne.jwt);
+  const variables = {
+    data: { title: 'test board' }
+  };
+  const { data } = await client.mutate({ mutation: createBoard, variables });
+  const exists = await prisma.exists.Board({
+    id: data.createBoard.id
+  });
+  expect(exists).toBe(true);
+  expect(data.createBoard.title).toBe('test board');
 });
