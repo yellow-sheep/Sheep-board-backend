@@ -1,4 +1,4 @@
-import getUserId from "../utils/getUserId";
+import getUserId from '../utils/getUserId';
 const Query = {
   users(parent, args, { prisma }, info) {
     const opArgs = {
@@ -25,6 +25,18 @@ const Query = {
       {
         where: {
           id: userId
+        }
+      },
+      info
+    );
+  },
+
+  boards(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    return prisma.query.boards(
+      {
+        where: {
+          author: userId
         }
       },
       info

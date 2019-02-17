@@ -33,7 +33,7 @@ type Card {
   tag: String!
   title: String!
   text: String!
-  author: User! @relation(name: "BoardToUser", onDelete: SET_NULL)
+  author: User! @relation(name: "CardToUser", onDelete: SET_NULL)
   list: List! @relation(name: "CardToList", onDelete: SET_NULL)
   board: Board! @relation(name: "CardToBoard", onDelete: SET_NULL)
   updatedAt: DateTime!

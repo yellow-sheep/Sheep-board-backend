@@ -1,4 +1,7 @@
 #import UserOrderByInput  from './generated/prisma.graphql'
+#import BoardOrderByInput  from './generated/prisma.graphql'
+#import ListOrderByInput  from './generated/prisma.graphql'
+#import CardOrderByInput  from './generated/prisma.graphql'
 
 type Query {
   users(
@@ -9,6 +12,29 @@ type Query {
     orderBy: UserOrderByInput
   ): [User!]!
 
+  boards(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: BoardOrderByInput
+  ): [Board!]!
+
+  lists(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: ListOrderByInput
+  ): [List!]!
+
+  cards(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: CardOrderByInput
+  ): [Cards]
   me: User!
 }
 
@@ -49,6 +75,39 @@ type User {
   name: String!
   email: String
   password: String!
+  updatedAt: String!
+  createdAt: String!
+  boards: [Board!]!
+  cards: [Card!]!
+}
+
+type Board {
+  id: ID!
+  title: String!
+  author: User!
+  lists: [List!]!
+  cards: [Card!]!
+  updatedAt: String!
+  createdAt: String!
+}
+
+type List {
+  id: ID!
+  title: String!
+  cards: [Card!]!
+  board: Board!
+  updatedAt: String!
+  createdAt: String!
+}
+
+type Cards {
+  id: ID!
+  tag: String!
+  title: String!
+  text: String!
+  author: User!
+  list: List!
+  board: Board!
   updatedAt: String!
   createdAt: String!
 }
