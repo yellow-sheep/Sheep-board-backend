@@ -6,7 +6,12 @@ import seedDataBase, {
   userOne,
   userTwo
 } from './utils/seedDatabase';
-import { myBoards, createBoard } from './utils/operations';
+import {
+  myBoards,
+  createBoard,
+  updateBoard,
+  deleteBoard
+} from './utils/operations';
 import getClient from './utils/getClient';
 import prisma from '../src/prisma';
 
@@ -31,4 +36,30 @@ test('Should create a board when a user is logged in', async () => {
   });
   expect(exists).toBe(true);
   expect(data.createBoard.title).toBe('test board');
+});
+
+test('Should update a board when a user is logged in', async () => {
+  const client = getClient(userOne.jwt);
+  const variables = {
+    id: boardOne.board.id,
+    data: { title: 'trello board' }
+  };
+  const { data } = await client.mutate({ mutation: updateBoard, variables });
+  const exists = await prisma.exists.Board({
+    id: boardOne.board.id
+  });
+  expect(exists).toBe(true);
+  expect(data.updateBoard.title).toBe('trello board');
+});
+
+test('Should delete a board correctly', async () => {
+  const client = getClient(userOne.jwt);
+  const variables = {
+    id: boardTwo.board.id
+  };
+  const { data } = await client.mutate({ mutation: deleteBoard, variables });
+  const exists = await prisma.exists.Board({
+    id: boardTwo.board.id
+  });
+  expect(exists).toBe(false);
 });

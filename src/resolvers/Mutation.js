@@ -114,6 +114,29 @@ const Mutation = {
       },
       info
     );
+  },
+
+  async deleteBoard(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const boardExists = await prisma.exists.Board({
+      id: args.id,
+      author: {
+        id: userId
+      }
+    });
+
+    if (!boardExists) {
+      throw new Error('Unable to delete the board');
+    }
+
+    return prisma.mutation.deleteBoard(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   }
 };
 

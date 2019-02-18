@@ -54,6 +54,24 @@ const createBoard = gql`
   }
 `;
 
+const updateBoard = gql`
+  mutation($id: ID!, $data: UpdateBoardInput!) {
+    updateBoard(id: $id, data: $data) {
+      title
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const deleteBoard = gql`
+  mutation($id: ID!) {
+    deleteBoard(id: $id) {
+      title
+    }
+  }
+`;
 const myBoards = gql`
   query {
     boards {
@@ -65,4 +83,13 @@ const myBoards = gql`
     }
   }
 `;
-export { createUser, login, getUsers, getProfile, createBoard, myBoards };
+export {
+  createUser,
+  login,
+  getUsers,
+  getProfile,
+  createBoard,
+  myBoards,
+  updateBoard,
+  deleteBoard
+};
