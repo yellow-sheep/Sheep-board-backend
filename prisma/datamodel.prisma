@@ -5,11 +5,37 @@ type User {
   password: String!
   updatedAt: DateTime!
   createdAt: DateTime!
+  boards: [Board!]! @relation(name: "BoardToUser", onDelete: CASCADE)
+  cards: [Card!]! @relation(name: "CardToUser", onDelete: CASCADE)
 }
 
-# type Chat {
-#   id:ID! @unique
-#   person: String!
-#   time: DateTime!
-#   outcome:
-# }
+type Board {
+  id: ID! @unique
+  title: String!
+  author: User! @relation(name: "BoardToUser", onDelete: SET_NULL)
+  lists: [List!]! @relation(name: "ListToBoard", onDelete: CASCADE)
+  cards: [Card!]! @relation(name: "CardToBoard", onDelete: CASCADE)
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type List {
+  id: ID! @unique
+  title: String!
+  cards: [Card!]! @relation(name: "CardToList", onDelete: CASCADE)
+  board: Board! @relation(name: "ListToBoard", onDelete: SET_NULL)
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type Card {
+  id: ID! @unique
+  tag: String!
+  title: String!
+  text: String!
+  author: User! @relation(name: "CardToUser", onDelete: SET_NULL)
+  list: List! @relation(name: "CardToList", onDelete: SET_NULL)
+  board: Board! @relation(name: "CardToBoard", onDelete: SET_NULL)
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
