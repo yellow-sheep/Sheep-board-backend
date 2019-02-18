@@ -72,6 +72,71 @@ const Mutation = {
       user,
       token: generatedToken(user.id)
     };
+  },
+
+  createBoard(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    return prisma.mutation.createBoard(
+      {
+        data: {
+          title: args.data.title,
+          author: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      info
+    );
+  },
+
+  async updateBoard(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const boardExists = await prisma.exists.Board({
+      id: args.id,
+      author: {
+        id: userId
+      }
+    });
+
+    if (!boardExists) {
+      throw new Error('Unable to update the board');
+    }
+
+    return prisma.mutation.updateBoard(
+      {
+        where: {
+          id: args.id
+        },
+        data: args.data
+      },
+      info
+    );
+  },
+
+  async deleteBoard(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const boardExists = await prisma.exists.Board({
+      id: args.id,
+      author: {
+        id: userId
+      }
+    });
+
+    if (!boardExists) {
+      throw new Error('Unable to delete the board');
+    }
+
+    return prisma.mutation.deleteBoard(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   }
 };
 
