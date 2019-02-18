@@ -10,7 +10,8 @@ import {
   myBoards,
   createBoard,
   updateBoard,
-  deleteBoard
+  deleteBoard,
+  getOneBoard
 } from './utils/operations';
 import getClient from './utils/getClient';
 import prisma from '../src/prisma';
@@ -18,12 +19,22 @@ import prisma from '../src/prisma';
 const client = getClient();
 beforeEach(seedDataBase);
 
-test('Should get the boards of a user', async () => {
-  const client = getClient(userTwo.jwt);
+test('Should get all boards of a user', async () => {
+  const client = getClient(userOne.jwt);
   const { data } = await client.query({ query: myBoards });
 
   expect(data.boards.length).toBe(2);
   expect(data.boards[0].author.id).toBe(userOne.user.id);
+});
+
+test('Should get a board of a user based on its id', async () => {
+  const client = getClient(userOne.jwt);
+  const variables = {
+    id: boardOne.board.id
+  };
+  const { data } = await client.query({ query: getOneBoard, variables });
+
+  expect(data.board.author.id).toBe(userOne.user.id);
 });
 
 test('Should create a board when a user is logged in', async () => {

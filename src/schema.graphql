@@ -20,6 +20,7 @@ type Query {
     orderBy: BoardOrderByInput
   ): [Board!]!
 
+  board(id: ID!): Board!
   lists(
     query: String
     first: Int
