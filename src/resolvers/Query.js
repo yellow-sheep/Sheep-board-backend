@@ -32,12 +32,17 @@ const Query = {
   },
 
   boards(parent, args, { prisma, request }, info) {
-    //const userId = getUserId(request);
+    const userId = getUserId(request);
     const opArgs = {
       first: args.first,
       skip: args.skip,
       after: args.after,
-      orderBy: args.orderBy
+      orderBy: args.orderBy,
+      where: {
+        author: {
+          id: userId
+        }
+      }
     };
     if (args.query) {
       opArgs.where.OR = [
@@ -47,6 +52,33 @@ const Query = {
       ];
     }
     return prisma.query.boards(opArgs, info);
+  },
+
+  async board(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const posts = await prisma.query.boards(
+      {
+        where: {
+          AND: [
+            {
+              id: args.id
+            },
+            {
+              author: {
+                id: userId
+              }
+            }
+          ]
+        }
+      },
+      info
+    );
+    if (!posts.length) {
+      throw new Error('Board not found');
+    }
+
+    return posts[0];
   },
 
   lists(parent, args, { prisma, request }, info) {

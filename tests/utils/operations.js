@@ -42,7 +42,6 @@ const getProfile = gql`
   }
 `;
 //Boards
-
 const createBoard = gql`
   mutation($data: CreateBoardInput!) {
     createBoard(data: $data) {
@@ -83,6 +82,17 @@ const myBoards = gql`
     }
   }
 `;
+
+const getOneBoard = gql`
+  query($id: ID!) {
+    board(id: $id) {
+      title
+      author {
+        id
+      }
+    }
+  }
+`;
 export {
   createUser,
   login,
@@ -91,5 +101,6 @@ export {
   createBoard,
   myBoards,
   updateBoard,
-  deleteBoard
+  deleteBoard,
+  getOneBoard
 };
