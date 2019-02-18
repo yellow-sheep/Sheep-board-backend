@@ -21,6 +21,7 @@ beforeEach(seedDataBase);
 test('Should get the boards of a user', async () => {
   const client = getClient(userTwo.jwt);
   const { data } = await client.query({ query: myBoards });
+
   expect(data.boards.length).toBe(2);
   expect(data.boards[0].author.id).toBe(userOne.user.id);
 });
@@ -34,6 +35,7 @@ test('Should create a board when a user is logged in', async () => {
   const exists = await prisma.exists.Board({
     id: data.createBoard.id
   });
+
   expect(exists).toBe(true);
   expect(data.createBoard.title).toBe('test board');
 });
@@ -48,6 +50,7 @@ test('Should update a board when a user is logged in', async () => {
   const exists = await prisma.exists.Board({
     id: boardOne.board.id
   });
+
   expect(exists).toBe(true);
   expect(data.updateBoard.title).toBe('trello board');
 });
@@ -61,5 +64,6 @@ test('Should delete a board correctly', async () => {
   const exists = await prisma.exists.Board({
     id: boardTwo.board.id
   });
+
   expect(exists).toBe(false);
 });

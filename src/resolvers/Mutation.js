@@ -74,7 +74,7 @@ const Mutation = {
     };
   },
 
-  async createBoard(parent, args, { prisma, request }, info) {
+  createBoard(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
     return prisma.mutation.createBoard(
