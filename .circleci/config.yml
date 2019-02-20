@@ -6,13 +6,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: prismagraphql/prisma:1.24
+      - image: circleci/node: 8
 
     working_directory: ~/sheep-board-backend
 
     steps:
       - checkout
-
+      - run: yarn install
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -28,7 +28,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-       - run: npm run test
+       - run: yarn test
 
 steps:
   - checkout
