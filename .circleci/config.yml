@@ -9,14 +9,26 @@ jobs:
     working_directory: ~/tmp
     steps:
       - checkout
+      - restore_cache:
+      keys:
+        - v1-myapp-{{ .Branch }}-{{ checksum "package.json" }}
+      # if cache for exact version of `project.clj` is not present then load any most recent one
+        - v1-myapp-
+
       - run:
           name: Start Prisma server
           command: |
             npm install && npm install -g prisma
             docker-compose up -d
-            cd ../prisma
+            cd prisma
             sleep 20
-            prisma deploy -e ../config/test.env
+            prisma deploy
+
+      - save_cache:
+        key: - v1-myapp-{{ .Branch }}-{{ checksum "package.json" }}
+        paths:
+          - node_modules
+
       - run: npm run test
 # workflows:
 #   version: 2
