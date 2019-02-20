@@ -14,7 +14,7 @@ jobs:
           command: |
             npm install && npm install -g prisma
             docker-compose up -d
-            cd prisma
+            cd ../prisma
             sleep 20
             prisma deploy -e ../config/test.env
       - run: npm run test
