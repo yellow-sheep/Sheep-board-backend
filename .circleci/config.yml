@@ -12,14 +12,14 @@ jobs:
 
     steps:
       - checkout
-      - run: yarn install
+      
       # Download and cache dependencies
-      # - restore_cache:
-      #     keys:
-      #       - v1-dependencies-{{ checksum "package.json" }}
-      #       # fallback to using the latest cache if no exact match is found
-      #       - v1-dependencies-
-
+      - restore_cache:
+          keys:
+            - yarn-cache-{{ .Branch}}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            # - v1-dependencies-
+      - run: yarn install
       #- run: npm install
 
       - save_cache:
@@ -29,13 +29,13 @@ jobs:
 
       # run tests!
        - run: yarn test
-deploy:
-  steps:
-    - checkout
-    - run:
-      name: Deploy Master to Heroku
-      command: |
-        git push https://git.heroku.com/infinite-beach-93710.git master
+  deploy:
+    steps:
+      - checkout
+      - run:
+        name: Deploy Master to Heroku
+        command: |
+          git push https://git.heroku.com/infinite-beach-93710.git master
 
 workflows:
   version: 2
