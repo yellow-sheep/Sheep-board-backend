@@ -1,5 +1,5 @@
 import 'cross-fetch/polyfill';
-import seedDataBase, {
+import seedDatabase, {
   boardOne,
   boardTwo,
   userOne,
@@ -16,7 +16,7 @@ import getClient from './utils/getClient';
 import prisma from '../src/prisma';
 
 const client = getClient();
-beforeEach(seedDataBase);
+beforeEach(seedDatabase);
 
 test('Should get all boards of a user', async () => {
   const client = getClient(userOne.jwt);
@@ -76,4 +76,22 @@ test('Should delete a board correctly', async () => {
   });
 
   expect(exists).toBe(false);
+});
+test('Should delete all the lists when a board was deleted', async () => {
+  const client = getClient(userOne.jwt);
+  const variables = {
+    id: boardTwo.board.id
+  };
+  const { data } = await client.mutate({ mutation: deleteBoard, variables });
+  const boardExists = await prisma.exists.Board({
+    id: boardTwo.board.id
+  });
+  const listExists = await prisma.exists.List({
+    board: {
+      id: boardTwo.board.id
+    }
+  });
+
+  expect(boardExists).toBe(false);
+  expect(listExists).toBe(false);
 });

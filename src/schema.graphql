@@ -50,6 +50,8 @@ type Mutation {
   createBoard(data: CreateBoardInput!): Board!
   updateBoard(id: ID!, data: UpdateBoardInput!): Board!
   deleteBoard(id: ID!): Board!
+  createList(data: CreateListInput): List!
+  updateList(id: ID!, data: UpdateListInput): List!
 }
 
 # type Subscription {
@@ -83,6 +85,14 @@ input CreateBoardInput {
 
 input UpdateBoardInput {
   title: String
+}
+
+input CreateListInput {
+  title: String!
+  board: ID!
+}
+input UpdateListInput {
+  title: String!
 }
 
 type User {
