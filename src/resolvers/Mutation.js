@@ -137,6 +137,57 @@ const Mutation = {
       },
       info
     );
+  },
+
+  async createList(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const boardExists = await prisma.exists.Board({
+      id: args.data.boardExists
+    });
+    if (!boardExists) {
+      throw new Error("Can't find the board");
+    }
+    return prisma.mutation.createList(
+      {
+        data: {
+          title: args.data.title,
+          author: {
+            connect: {
+              id: userId
+            }
+          },
+          board: {
+            connect: {
+              id: args.data.board
+            }
+          }
+        }
+      },
+      info
+    );
+  },
+
+  async updateList(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const ListExists = await prisma.exists.List({
+      id: args.id,
+      author: {
+        id: userId
+      }
+    });
+
+    if (!ListExists) {
+      throw new Error('Unable to update the list');
+    }
+    return prisma.mutation.updateList(
+      {
+        where: {
+          id: args.id
+        },
+        data: args.data
+      },
+      info
+    );
   }
 };
 
