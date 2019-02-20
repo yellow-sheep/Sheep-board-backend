@@ -21,6 +21,7 @@ type Query {
   ): [Board!]!
 
   board(id: ID!): Board!
+
   lists(
     query: String
     first: Int
@@ -29,13 +30,15 @@ type Query {
     orderBy: ListOrderByInput
   ): [List!]!
 
+  list(id: ID!): List!
+
   cards(
     query: String
     first: Int
     skip: Int
     after: String
     orderBy: CardOrderByInput
-  ): [Cards]
+  ): [Card]
   me: User!
 }
 
@@ -106,13 +109,14 @@ type Board {
 type List {
   id: ID!
   title: String!
+  author: User!
   cards: [Card!]!
   board: Board!
   updatedAt: String!
   createdAt: String!
 }
 
-type Cards {
+type Card {
   id: ID!
   tag: String!
   title: String!

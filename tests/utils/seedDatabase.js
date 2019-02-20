@@ -6,7 +6,7 @@ const userOne = {
   input: {
     name: 'Jen',
     email: 'jen@example.com',
-    password: bcrypt.hashSync('Red098!@#$')
+    password: bcrypt.hashSync('Red098!@#$ABC')
   },
   user: undefined,
   jwt: undefined
@@ -16,7 +16,7 @@ const userTwo = {
   input: {
     name: 'Jeff',
     email: 'jeff@example.com',
-    password: bcrypt.hashSync('PassForJeff')
+    password: bcrypt.hashSync('PassForJeffXCDS')
   },
   user: undefined,
   jwt: undefined
@@ -36,6 +36,19 @@ const boardTwo = {
   board: undefined
 };
 
+const listOne = {
+  input: {
+    title: 'create lists query'
+  },
+  list: undefined
+};
+
+const listTwo = {
+  input: {
+    title: 'create lists mutation'
+  },
+  list: undefined
+};
 const seedDatabase = async () => {
   // Delete test data
   await prisma.mutation.deleteManyBoards();
@@ -75,6 +88,8 @@ const seedDatabase = async () => {
       }
     }
   });
+
+  //create list one
 };
 
 export { seedDatabase as default, userOne, userTwo, boardOne, boardTwo };

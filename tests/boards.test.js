@@ -1,5 +1,4 @@
 import 'cross-fetch/polyfill';
-import { gql } from 'apollo-boost';
 import seedDataBase, {
   boardOne,
   boardTwo,

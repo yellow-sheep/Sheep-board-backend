@@ -41,6 +41,7 @@ const getProfile = gql`
     }
   }
 `;
+
 //Boards
 const createBoard = gql`
   mutation($data: CreateBoardInput!) {
@@ -93,6 +94,30 @@ const getOneBoard = gql`
     }
   }
 `;
+
+//lists
+const getLists = gql`
+  query {
+    lists {
+      title
+      author {
+        id
+      }
+    }
+  }
+`;
+
+const getOneList = gql`
+  query($id: ID!) {
+    list(id: $id) {
+      title
+      author {
+        id
+      }
+    }
+  }
+`;
+
 export {
   createUser,
   login,
@@ -102,5 +127,7 @@ export {
   myBoards,
   updateBoard,
   deleteBoard,
-  getOneBoard
+  getOneBoard,
+  getLists,
+  getOneList
 };
