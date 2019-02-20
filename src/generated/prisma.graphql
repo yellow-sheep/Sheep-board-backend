@@ -1,5 +1,5 @@
 # source: http://localhost:4466/coffee-chats/dev
-# timestamp: Sat Feb 16 2019 16:54:06 GMT-0500 (Eastern Standard Time)
+# timestamp: Wed Feb 20 2019 10:12:42 GMT-0500 (Eastern Standard Time)
 
 type AggregateBoard {
   count: Int!
@@ -1216,6 +1216,7 @@ scalar Json
 type List implements Node {
   id: ID!
   title: String!
+  author: User!
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card!]
   board: Board!
   updatedAt: DateTime!
@@ -1234,6 +1235,7 @@ type ListConnection {
 
 input ListCreateInput {
   title: String!
+  author: UserCreateOneInput!
   cards: CardCreateManyWithoutListInput
   board: BoardCreateOneWithoutListsInput!
 }
@@ -1250,11 +1252,13 @@ input ListCreateOneWithoutCardsInput {
 
 input ListCreateWithoutBoardInput {
   title: String!
+  author: UserCreateOneInput!
   cards: CardCreateManyWithoutListInput
 }
 
 input ListCreateWithoutCardsInput {
   title: String!
+  author: UserCreateOneInput!
   board: BoardCreateOneWithoutListsInput!
 }
 
@@ -1461,6 +1465,7 @@ input ListSubscriptionWhereInput {
 
 input ListUpdateInput {
   title: String
+  author: UserUpdateOneRequiredInput
   cards: CardUpdateManyWithoutListInput
   board: BoardUpdateOneRequiredWithoutListsInput
 }
@@ -1498,11 +1503,13 @@ input ListUpdateOneRequiredWithoutCardsInput {
 
 input ListUpdateWithoutBoardDataInput {
   title: String
+  author: UserUpdateOneRequiredInput
   cards: CardUpdateManyWithoutListInput
 }
 
 input ListUpdateWithoutCardsDataInput {
   title: String
+  author: UserUpdateOneRequiredInput
   board: BoardUpdateOneRequiredWithoutListsInput
 }
 
@@ -1655,6 +1662,7 @@ input ListWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  author: UserWhereInput
   cards_every: CardWhereInput
   cards_some: CardWhereInput
   cards_none: CardWhereInput
@@ -1672,30 +1680,30 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createUser(data: UserCreateInput!): User!
   createBoard(data: BoardCreateInput!): Board!
   createList(data: ListCreateInput!): List!
   createCard(data: CardCreateInput!): Card!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  createUser(data: UserCreateInput!): User!
   updateBoard(data: BoardUpdateInput!, where: BoardWhereUniqueInput!): Board
   updateList(data: ListUpdateInput!, where: ListWhereUniqueInput!): List
   updateCard(data: CardUpdateInput!, where: CardWhereUniqueInput!): Card
-  deleteUser(where: UserWhereUniqueInput!): User
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteBoard(where: BoardWhereUniqueInput!): Board
   deleteList(where: ListWhereUniqueInput!): List
   deleteCard(where: CardWhereUniqueInput!): Card
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
   upsertBoard(where: BoardWhereUniqueInput!, create: BoardCreateInput!, update: BoardUpdateInput!): Board!
   upsertList(where: ListWhereUniqueInput!, create: ListCreateInput!, update: ListUpdateInput!): List!
   upsertCard(where: CardWhereUniqueInput!, create: CardCreateInput!, update: CardUpdateInput!): Card!
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyBoards(data: BoardUpdateManyMutationInput!, where: BoardWhereInput): BatchPayload!
   updateManyLists(data: ListUpdateManyMutationInput!, where: ListWhereInput): BatchPayload!
   updateManyCards(data: CardUpdateManyMutationInput!, where: CardWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyBoards(where: BoardWhereInput): BatchPayload!
   deleteManyLists(where: ListWhereInput): BatchPayload!
   deleteManyCards(where: CardWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -1731,18 +1739,18 @@ enum PrismaDatabase {
 }
 
 type Query {
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   boards(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Board]!
   lists(where: ListWhereInput, orderBy: ListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [List]!
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card]!
-  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   board(where: BoardWhereUniqueInput!): Board
   list(where: ListWhereUniqueInput!): List
   card(where: CardWhereUniqueInput!): Card
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  user(where: UserWhereUniqueInput!): User
   boardsConnection(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BoardConnection!
   listsConnection(where: ListWhereInput, orderBy: ListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ListConnection!
   cardsConnection(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CardConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1752,10 +1760,10 @@ type Query {
 }
 
 type Subscription {
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   board(where: BoardSubscriptionWhereInput): BoardSubscriptionPayload
   list(where: ListSubscriptionWhereInput): ListSubscriptionPayload
   card(where: CardSubscriptionWhereInput): CardSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User implements Node {
@@ -1785,6 +1793,11 @@ input UserCreateInput {
   password: String!
   boards: BoardCreateManyWithoutAuthorInput
   cards: CardCreateManyWithoutAuthorInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutBoardsInput {
@@ -1883,6 +1896,14 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdateDataInput {
+  name: String
+  email: String
+  password: String
+  boards: BoardUpdateManyWithoutAuthorInput
+  cards: CardUpdateManyWithoutAuthorInput
+}
+
 input UserUpdateInput {
   name: String
   email: String
@@ -1895,6 +1916,13 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
 }
 
 input UserUpdateOneRequiredWithoutBoardsInput {
@@ -1923,6 +1951,11 @@ input UserUpdateWithoutCardsDataInput {
   email: String
   password: String
   boards: BoardUpdateManyWithoutAuthorInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutBoardsInput {

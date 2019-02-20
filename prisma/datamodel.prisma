@@ -22,6 +22,7 @@ type Board {
 type List {
   id: ID! @unique
   title: String!
+  author: User! @relation(name: "ListToUser", onDelete: SET_NULL)
   cards: [Card!]! @relation(name: "CardToList", onDelete: CASCADE)
   board: Board! @relation(name: "ListToBoard", onDelete: SET_NULL)
   updatedAt: DateTime!

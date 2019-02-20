@@ -38,7 +38,7 @@ type Query {
     skip: Int
     after: String
     orderBy: CardOrderByInput
-  ): [Cards]
+  ): [Card]
   me: User!
 }
 
@@ -109,13 +109,14 @@ type Board {
 type List {
   id: ID!
   title: String!
+  author: User!
   cards: [Card!]!
   board: Board!
   updatedAt: String!
   createdAt: String!
 }
 
-type Cards {
+type Card {
   id: ID!
   tag: String!
   title: String!
