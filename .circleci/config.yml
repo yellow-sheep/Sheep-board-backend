@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys: npm-caching-{{ .Branch }}-{{ checksum "package.json" }}
+          keys: npm-caching-{{ .Branch }}-{{ checksum "package.json" }}
       # if cache for exact version of `project.clj` is not present then load any most recent one
 
       - run:
@@ -23,9 +23,9 @@ jobs:
             prisma deploy
 
       - save_cache:
-        key: npm-caching-{{ .Branch }}-{{ checksum "package.json" }}
-        paths:
-          - node_modules
+          key: npm-caching-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - node_modules
 
       - run: npm run test
 # workflows:
