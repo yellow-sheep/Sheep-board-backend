@@ -36,6 +36,19 @@ const boardTwo = {
   board: undefined
 };
 
+const listOne = {
+  input: {
+    title: 'create lists query'
+  },
+  list: undefined
+};
+
+const listTwo = {
+  input: {
+    title: 'create lists mutation'
+  },
+  list: undefined
+};
 const seedDatabase = async () => {
   // Delete test data
   await prisma.mutation.deleteManyBoards();
@@ -75,6 +88,8 @@ const seedDatabase = async () => {
       }
     }
   });
+
+  //create list one
 };
 
 export { seedDatabase as default, userOne, userTwo, boardOne, boardTwo };
