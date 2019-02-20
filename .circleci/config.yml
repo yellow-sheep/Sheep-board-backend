@@ -9,7 +9,6 @@ jobs:
     working_directory: ~/tmp
     steps:
       - checkout
-
       - run:
           name: Start Prisma server
           command: |
