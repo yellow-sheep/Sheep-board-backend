@@ -49,8 +49,10 @@ const listTwo = {
   },
   list: undefined
 };
+
 const seedDatabase = async () => {
   // Delete test data
+  await prisma.mutation.deleteManyLists();
   await prisma.mutation.deleteManyBoards();
   await prisma.mutation.deleteManyUsers();
 
@@ -90,6 +92,44 @@ const seedDatabase = async () => {
   });
 
   //create list one
+  listOne.list = await prisma.mutation.createList({
+    data: {
+      ...listOne.input,
+      author: {
+        connect: {
+          id: userOne.user.id
+        }
+      },
+      board: {
+        connect: {
+          id: boardOne.board.id
+        }
+      }
+    }
+  });
+  listTwo.list = await prisma.mutation.createList({
+    data: {
+      ...listTwo.input,
+      author: {
+        connect: {
+          id: userOne.user.id
+        }
+      },
+      board: {
+        connect: {
+          id: boardTwo.board.id
+        }
+      }
+    }
+  });
 };
 
-export { seedDatabase as default, userOne, userTwo, boardOne, boardTwo };
+export {
+  seedDatabase as default,
+  userOne,
+  userTwo,
+  boardOne,
+  boardTwo,
+  listOne,
+  listTwo
+};

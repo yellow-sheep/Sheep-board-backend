@@ -114,6 +114,36 @@ const getOneList = gql`
       author {
         id
       }
+      board {
+        id
+      }
+    }
+  }
+`;
+
+const createAList = gql`
+  mutation($data: CreateListInput!) {
+    createList(data: $data) {
+      title
+      author {
+        id
+      }
+      board {
+        id
+      }
+    }
+  }
+`;
+const updateList = gql`
+  mutation($id: ID!, $data: UpdateListInput!) {
+    updateList(id: $id, data: $data) {
+      title
+      author {
+        id
+      }
+      board {
+        id
+      }
     }
   }
 `;
@@ -129,5 +159,7 @@ export {
   deleteBoard,
   getOneBoard,
   getLists,
-  getOneList
+  getOneList,
+  createAList,
+  updateList
 };
