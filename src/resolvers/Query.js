@@ -57,7 +57,7 @@ const Query = {
   async board(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const posts = await prisma.query.boards(
+    const boards = await prisma.query.boards(
       {
         where: {
           AND: [
@@ -74,20 +74,25 @@ const Query = {
       },
       info
     );
-    if (!posts.length) {
+    if (!boards.length) {
       throw new Error('Board not found');
     }
 
-    return posts[0];
+    return boards[0];
   },
 
   lists(parent, args, { prisma, request }, info) {
-    //const userId = getUserId(request);
+    const userId = getUserId(request);
     const opArgs = {
       first: args.first,
       skip: args.skip,
       after: args.after,
-      orderBy: args.orderBy
+      orderBy: args.orderBy,
+      where: {
+        author: {
+          id: userId
+        }
+      }
     };
     if (args.query) {
       opArgs.where.OR = [
@@ -97,6 +102,32 @@ const Query = {
       ];
     }
     return prisma.query.lists(opArgs, info);
+  },
+
+  async list(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const lists = await prisma.query.lists(
+      {
+        where: {
+          AND: [
+            {
+              id: args.id
+            },
+            {
+              author: {
+                id: userId
+              }
+            }
+          ]
+        }
+      },
+      info
+    );
+    if (!lists.length) {
+      throw new Error('List not found');
+    }
+
+    return lists[0];
   },
 
   cards(parent, args, { prisma, request }, info) {

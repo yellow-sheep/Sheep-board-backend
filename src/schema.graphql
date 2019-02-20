@@ -21,6 +21,7 @@ type Query {
   ): [Board!]!
 
   board(id: ID!): Board!
+
   lists(
     query: String
     first: Int
@@ -28,6 +29,8 @@ type Query {
     after: String
     orderBy: ListOrderByInput
   ): [List!]!
+
+  list(id: ID!): List!
 
   cards(
     query: String
