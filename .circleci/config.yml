@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys: npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
+        keys: npm-caching-{{ .Branch }}-{{ checksum "package.json" }}
       # if cache for exact version of `project.clj` is not present then load any most recent one
           
 
