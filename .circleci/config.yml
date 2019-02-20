@@ -5,18 +5,20 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/node:8
+    machine: true
+    working_directory: ~/tmp
     steps:
       - checkout
-      - restore_cache:
-          key: npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
-      - run: npm i
-      - save_cache:
-          key: npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-      -run: npm test
+
+      - run:
+          name: Start Prisma server
+          command: |
+            npm install && npm install -g prisma
+            docker-compose up -d
+            cd prisma
+            sleep 20
+            prisma deploy -e ../config/test.env
+      - run: npm run test
 # workflows:
 #   version: 2
 #   build-deploy:
