@@ -52,6 +52,7 @@ type Mutation {
   deleteBoard(id: ID!): Board!
   createList(data: CreateListInput): List!
   updateList(id: ID!, data: UpdateListInput): List!
+  deleteList(id: ID!): List!
 }
 
 # type Subscription {

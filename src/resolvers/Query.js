@@ -131,12 +131,17 @@ const Query = {
   },
 
   cards(parent, args, { prisma, request }, info) {
-    //const userId = getUserId(request);
+    const userId = getUserId(request);
     const opArgs = {
       first: args.first,
       skip: args.skip,
       after: args.after,
-      orderBy: args.orderBy
+      orderBy: args.orderBy,
+      where: {
+        author: {
+          id: userId
+        }
+      }
     };
     if (args.query) {
       opArgs.where.OR = [
@@ -151,7 +156,7 @@ const Query = {
         }
       ];
     }
-    return prisma.query.lists(opArgs, info);
+    return prisma.query.cards(opArgs, info);
   }
 };
 

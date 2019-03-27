@@ -11,7 +11,8 @@ import {
   createAList,
   updateList,
   getLists,
-  getOneList
+  getOneList,
+  deleteList
 } from './utils/operations';
 import prisma from '../src/prisma';
 
@@ -66,4 +67,17 @@ test('Should update a list when a user is logged in', async () => {
   const { data } = await client.mutate({ mutation: updateList, variables });
 
   expect(data.updateList.title).toBe('Prepare for interviews');
+});
+
+test('Should delete a list when a user is logged in', async () => {
+  const client = getClient(userOne.jwt);
+  const variables = {
+    id: listTwo.list.id
+  };
+  const { data } = await client.mutate({ mutation: deleteList, variables });
+  const listExists = await prisma.exists.List({
+    id: listTwo.list.id
+  });
+
+  expect(listExists).toBe(false);
 });

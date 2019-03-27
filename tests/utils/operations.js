@@ -148,6 +148,19 @@ const updateList = gql`
   }
 `;
 
+const deleteList = gql`
+  mutation($id: ID!) {
+    deleteList(id: $id) {
+      title
+      author {
+        id
+      }
+      board {
+        id
+      }
+    }
+  }
+`;
 export {
   createUser,
   login,
@@ -161,5 +174,6 @@ export {
   getLists,
   getOneList,
   createAList,
-  updateList
+  updateList,
+  deleteList
 };
