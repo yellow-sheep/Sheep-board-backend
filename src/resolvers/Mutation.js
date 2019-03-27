@@ -188,6 +188,27 @@ const Mutation = {
       },
       info
     );
+  },
+
+  async deleteList(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const ListExists = await prisma.exists.List({
+      id: args.id,
+      author: {
+        id: userId
+      }
+    });
+
+    if (!ListExists) {
+      throw new Error('Unable to delete the list');
+    }
+
+    return prisma.mutation.deleteList({
+      where: {
+        id: args.id
+      }
+    });
   }
 };
 
